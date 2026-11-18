@@ -3,7 +3,7 @@ local skyrim_se_dir = "C:/SteamLibrary/steamapps/common/Skyrim Special Edition"
 local sksevr_source_dir = "C:/Code/sksevr_2_00_12/Data/Scripts/Source"
 local modlist_mods_dirs = {"C:/Games/NewSkyrimVR/mods", "C:/Games/MySkyrimVR/modlist/mods"}
 
-local version = "0.1.0"
+local version = "0.2.0"
 local name = "SurvivalModeVR"
 
 set_project(name)

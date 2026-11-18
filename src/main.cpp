@@ -8,18 +8,20 @@
 #include "levelup.h"
 #include "toggle.h"
 #include "description.h"
+#include "hud.h"
 
 namespace {
 	void OnMessage(SKSE::MessagingInterface::Message *message) {
 		switch (message->type) {
 			case SKSE::MessagingInterface::kDataLoaded:
 				DOBJ::ResolveForms();
+				break;
 		}
 	}
 }
 
 SKSEPluginLoad(SKSE::LoadInterface *skse) {
-	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize;
+	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize + HUD::trampolineSize;
 	SKSE::Init(skse, {.trampoline = true, .trampolineSize = trampolineSize});
 
 	auto plugin = SKSE::PluginDeclaration::GetSingleton();
@@ -36,6 +38,7 @@ SKSEPluginLoad(SKSE::LoadInterface *skse) {
 	LevelUp::InstallHooks();
 	Toggle::InstallHooks();
 	Description::InstallHooks();
+	HUD::InstallHooks();
 	SKSE::GetMessagingInterface()->RegisterListener(OnMessage);
 
 	logger::info("Initialization complete");

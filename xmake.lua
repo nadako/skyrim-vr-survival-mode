@@ -4,7 +4,7 @@ local sksevr_source_dir = "C:/Code/sksevr_2_00_12/Data/Scripts/Source"
 local modlist_mods_dirs = {"C:/Games/NewSkyrimVR/mods", "C:/Games/MySkyrimVR/modlist/mods"}
 local ffdec_cli_jar = "C:/Users/nadako/scoop/apps/ffdec/current/ffdec-cli.jar"
 
-local version = "0.3.1"
+local version = "0.4.0"
 local name = "SurvivalModeVR"
 
 set_project(name)
@@ -76,6 +76,7 @@ target(name)
 	    description = "Survival Mode VR Engine Patch"
 	})
 	set_pcxxheader("src/pch.h")
+	add_includedirs("mod_api")
 	add_files("src/**.cpp")
 
 	before_build(function(target)

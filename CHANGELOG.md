@@ -1,6 +1,8 @@
-## 0.3.0 - UNRELEASED
+## 0.3.0 - 2026-11-21
 
-- Added inventory item warmth display.
+- Added inventory item warmth display, as well as the player's total warmth and warmth change in the bottom bar, like in AE.
+  This requires SkyUI-VR, since I had to edit its swf files (Data\Interface\skyui\itemcard.swf and bottombar.swf),
+  make sure this mod wins all the loose file conflicts again!
 
 ## 0.2.0 - 2026-11-19
 

@@ -1,3 +1,7 @@
+## 0.3.0 - UNRELEASED
+
+- Added inventory item warmth display.
+
 ## 0.2.0 - 2026-11-19
 
 - Added HUD temperature indicator and health/magicka/stamina penalty visualization from AE.

@@ -9,6 +9,7 @@
 #include "toggle.h"
 #include "description.h"
 #include "hud.h"
+#include "inventoryui.h"
 
 namespace {
 	void OnMessage(SKSE::MessagingInterface::Message *message) {
@@ -21,7 +22,7 @@ namespace {
 }
 
 SKSEPluginLoad(SKSE::LoadInterface *skse) {
-	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize + HUD::trampolineSize;
+	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize + HUD::trampolineSize + InventoryUI::trampolineSize;
 	SKSE::Init(skse, {.trampoline = true, .trampolineSize = trampolineSize});
 
 	auto plugin = SKSE::PluginDeclaration::GetSingleton();
@@ -39,6 +40,7 @@ SKSEPluginLoad(SKSE::LoadInterface *skse) {
 	Toggle::InstallHooks();
 	Description::InstallHooks();
 	HUD::InstallHooks();
+	InventoryUI::InstallHooks();
 	SKSE::GetMessagingInterface()->RegisterListener(OnMessage);
 
 	logger::info("Initialization complete");

@@ -1,6 +1,6 @@
 #include "description.h"
-
 #include "dobj.h"
+#include "utils.h"
 
 namespace Description {
 	namespace {
@@ -39,28 +39,6 @@ namespace Description {
 				uint16_t size;
 			};
 			((BSStringLayout *) text)->size = length < 0xFFFF ? (uint16_t) length : 0xFFFF;
-		}
-
-		uintptr_t WritePrologueDetour(uintptr_t address, const uint8_t *prologue, size_t prologueSize, uintptr_t thunk, const char *name) {
-			if (memcmp((void *) address, prologue, prologueSize) != 0) {
-				SKSE::stl::report_and_fail(std::format("{} doesn't start with the expected instructions.\nAnother mod has hooked the function?", name));
-			}
-
-			struct Stub : Xbyak::CodeGenerator {
-				Stub(const uint8_t *prologue, size_t prologueSize, uintptr_t returnAddress) {
-					db(prologue, prologueSize); // copy whatever was in the original prologue
-					mov(rax, returnAddress); // setting rax should be fine as it's a scratch and nothing in our prologues moves to it
-					jmp(rax);
-				}
-			};
-			Stub stub(prologue, prologueSize, address + prologueSize);
-			if (stub.getSize() != prologueSize + kStubReturnJumpSize) {
-				// this won't happen, lol
-				SKSE::stl::report_and_fail(std::format("{} prologue stub is {} bytes, expected {}.", name, stub.getSize(), prologueSize + kStubReturnJumpSize));
-			}
-			void *original = SKSE::GetTrampoline().allocate(stub);
-			SKSE::GetTrampoline().write_branch<5>(address, thunk, true);
-			return (uintptr_t) original;
 		}
 
 		// SkyrimSE.exe+1e1530 (this is the one used by ItemCard, don't confuse with commonlib's TESDescription::GetDescription overload)

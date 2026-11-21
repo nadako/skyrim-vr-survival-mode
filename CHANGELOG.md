@@ -1,3 +1,7 @@
+## 0.3.1 - 2026-11-21
+
+- Fixed bottom bar change values not being colored green/red. It's a SkyUI bug, but it's a one-line fix in my replacement file, so here you are.
+
 ## 0.3.0 - 2026-11-21
 
 - Added inventory item warmth display, as well as the player's total warmth and warmth change in the bottom bar, like in AE.

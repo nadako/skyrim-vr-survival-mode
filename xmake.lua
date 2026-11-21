@@ -2,6 +2,7 @@
 local skyrim_se_dir = "C:/SteamLibrary/steamapps/common/Skyrim Special Edition"
 local sksevr_source_dir = "C:/Code/sksevr_2_00_12/Data/Scripts/Source"
 local modlist_mods_dirs = {"C:/Games/NewSkyrimVR/mods", "C:/Games/MySkyrimVR/modlist/mods"}
+local ffdec_cli_jar = "C:/Users/nadako/scoop/apps/ffdec/current/ffdec-cli.jar"
 
 local version = "0.3.1"
 local name = "SurvivalModeVR"
@@ -25,6 +26,47 @@ set_config("skyrim_vr", true)
 set_config("rex_ini", true)
 set_config("skse_xbyak", true)
 includes("libs/CommonLibSSE-NG")
+
+target("patch-hud")
+	set_kind("phony")
+	set_default(false)
+	on_build(function(target)
+	    local misc_dir = path.join(os.projectdir(), "misc")
+	    local tmp_dir = path.join(path.absolute(target:autogendir()), target:name())
+	    local out_swf = path.join(os.projectdir(), "data", "Interface", "vr", "vr_hmd_info.swf")
+	    os.mkdir(tmp_dir)
+	    os.mkdir(path.directory(out_swf))
+
+	    local src_xml = path.join(tmp_dir, "hudmenu.xml")
+	    local dst_xml = path.join(tmp_dir, "vr_hmd_info.xml")
+	    local out_xml = path.join(tmp_dir, "vr_hmd_info_out.xml")
+
+	    local patched_swf = path.join(tmp_dir, "vr_hmd_info_patched.swf")
+	    os.execv("java", {"-jar", ffdec_cli_jar, "-onerror", "abort", "-swf2xml", path.join(misc_dir, "hud-ae", "hudmenu.swf"), src_xml})
+	    os.execv("java", {"-jar", ffdec_cli_jar, "-onerror", "abort", "-swf2xml", path.join(misc_dir, "hud-vr", "vr_hmd_info.swf"), dst_xml})
+	    os.execv("python", {path.join(misc_dir, "patch_swf.py"), src_xml, dst_xml, out_xml,
+	        "776:1158",
+	        "784:1169",
+	        "792:1176",
+	        "521:906",
+	        "+__Packages.Components.BlinkOnDemandPenaltyMeter",
+	        "+__Packages.Components.BlinkOnEmptyPenaltyMeter",
+	        "*CompassShoutMeterHolder=0.8",
+	    })
+	    os.execv("java", {"-jar", ffdec_cli_jar, "-onerror", "abort", "-xml2swf", out_xml, patched_swf})
+
+	    local scripts_src_dir = path.join(misc_dir, "hud")
+	    local scripts_dir = path.join(tmp_dir, "scripts")
+	    os.rm(scripts_dir)
+	    for _, file in ipairs(os.files(path.join(scripts_src_dir, "**.as"))) do
+	        local target_file = path.join(scripts_dir, "__Packages", path.relative(file, scripts_src_dir))
+	        os.mkdir(path.directory(target_file))
+	        os.cp(file, target_file)
+	    end
+	    os.execv("java", {"-jar", ffdec_cli_jar, "-config", "autoDeobfuscate=false,decompile=false", "-onerror", "abort", "-importScript", patched_swf, out_swf, scripts_dir})
+	    print("Built " .. out_swf)
+	end)
+target_end()
 
 target(name)
 	set_kind("shared")

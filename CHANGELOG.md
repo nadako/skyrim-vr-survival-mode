@@ -1,3 +1,7 @@
+## 0.4.1 - 2026-11-24
+
+- Fixed not being able to navigate the perks menu when it's open without sleeping when level-up is pending.
+
 ## 0.4.0 - 2026-11-24
 
 - Add basic API for third-party mods.

@@ -105,6 +105,25 @@ namespace LevelUp {
 			}
 		};
 
+		// VR has additional CanLevelUp check in StatsMenu::CanProcess: it handles the input only if we cannot level-up
+		// so we need to enrich the CanLevelUp check with the same survival mode + sleeping check
+		struct StatsMenu_CanProcess_CanLevelUp_Call {
+			static bool thunk(RE::PlayerCharacter::PlayerSkills *skills) {
+				if (!original(skills)) {
+					return false;
+				}
+				return !DOBJ::IsSurvivalModeActive() || RE::PlayerCharacter::GetSingleton()->GetPlayerFlags().sleeping;
+			}
+
+			static inline REL::Relocation<decltype(thunk)> original;
+
+			static void Install() {
+				logger::debug("Installing PlayerSkills::CanLevelUp call hook in StatsMenu::CanProcess");
+				REL::Relocation<uintptr_t> callOffset{REL::Offset(0x8ED8CE)};
+				original = callOffset.write_call<5>(thunk);
+			}
+		};
+		
 		// SkyrimSE.exe+98878b
 		// this extends the "level up" check in the tween menu. survival mode disables that completely, since you can only level up after sleep
 		struct TweenMenu_StartOpenMenuAnim_CanLevelUp_Call {
@@ -129,6 +148,7 @@ namespace LevelUp {
 		PlayerCharacter_InterruptSleepWait_EndSleepWait_Jump::Install();
 		StatsMenu_DtorImpl_CacheDrive_Call::Install();
 		StatsMenu_ProcessMessage_CanLevelUp_Call::Install();
+		StatsMenu_CanProcess_CanLevelUp_Call::Install();
 		TweenMenu_StartOpenMenuAnim_CanLevelUp_Call::Install();
 		logger::info("Level up hooks installed");
 	}

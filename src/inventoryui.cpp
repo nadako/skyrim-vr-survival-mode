@@ -30,8 +30,7 @@ namespace InventoryUI {
 						for (auto entry: *inventoryChanges->entryList) {
 							if (!entry || !entry->object) continue;
 							auto wornArmor = entry->object->As<RE::TESObjectARMO>();
-							if (!wornArmor || wornArmor == armor) continue;
-							if (!(wornArmor->GetSlotMask() & slotMask)) continue;
+							if (!wornArmor || !(wornArmor->GetSlotMask() & slotMask)) continue;
 							if (entry->IsWorn()) {
 								// IsWorn is last here because it does iterations and other checks are very basic
 								// if we get here that means equipping the given item will unequip this one,

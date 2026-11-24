@@ -2,7 +2,8 @@
 
 - Fixed not being able to navigate the perks menu when it's open without sleeping when level-up is pending.
 - Fixed warmth change display when the same item is already equipped.
-- Fixed ammo weight handling.
+- Fixed ammo weight loading being broken in some situations with ESL overrides.
+- Added item weight compatibility hook for Poached Bugs VR version 0.6.0 (issue reported to the author too).
 
 ## 0.4.0 - 2026-11-24
 

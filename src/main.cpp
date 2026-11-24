@@ -10,10 +10,14 @@
 #include "description.h"
 #include "hud.h"
 #include "inventoryui.h"
+#include "compat.h"
 
 namespace {
 	void OnMessage(SKSE::MessagingInterface::Message *message) {
 		switch (message->type) {
+			case SKSE::MessagingInterface::kPostLoad:
+				Compat::InstallHooks();
+				break;
 			case SKSE::MessagingInterface::kDataLoaded:
 				DOBJ::ResolveForms();
 				break;

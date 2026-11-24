@@ -77,12 +77,31 @@ namespace Description {
 				original = WritePrologueDetour(function.address(), prologue, sizeof(prologue), (uintptr_t) thunk, "ItemCard::GetMagicItemDescription");
 			}
 		};
+
+		// called by MagicMenuAddActiveEffectVisitor::Visit
+		struct GetActiveEffectDescription {
+			static void thunk(RE::ActiveEffect *effect, RE::BSString *out, const char *openTag, const char *closeTag) {
+				original(effect, out, openTag, closeTag);
+				FilterDescriptionTags(out);
+			}
+
+			static inline REL::Relocation<decltype(thunk)> original;
+
+			static void Install() {
+				logger::debug("Installing GetActiveEffectDescription hook");
+				// first three instructions (mov r11,rsp / push rdi / sub rsp,50h) give us 8 bytes that we can replace with a jump, no rip-relatives, so just copy them
+				constexpr uint8_t prologue[kGetActiveEffectDescriptionPrologueSize] = {0x4C, 0x8B, 0xDC, 0x57, 0x48, 0x83, 0xEC, 0x50};
+				REL::Relocation<uintptr_t> function{REL::Offset(0x5424B0)};
+				original = WritePrologueDetour(function.address(), prologue, sizeof(prologue), (uintptr_t) thunk, "GetActiveEffectDescription");
+			}
+		};
 	}
 
 	void InstallHooks() {
 		logger::info("Installing description hooks");
 		TESDescription_GetDescription::Install();
 		ItemCard_GetMagicItemDescription::Install();
+		GetActiveEffectDescription::Install();
 		logger::info("Description hooks installed");
 	}
 }

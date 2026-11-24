@@ -27,8 +27,7 @@ namespace ItemWeight {
 
 				if (size < sizeof(AMMO)) return true; // shouldn't really happen with valid data, but oh well
 
-				RE::FormID formID = file->currentform.formID;
-				RE::TESForm::AddCompileIndex(formID, file);
+				RE::FormID formID = file->currentform.formID; // NOTE: this is already the run-time ID
 				auto entry = (AMMO *) buffer;
 				ammoWeights[formID] = entry->weight;
 				logger::debug("Found ammo weight in {}: {:08X} -> {}", file->fileName, formID, entry->weight);

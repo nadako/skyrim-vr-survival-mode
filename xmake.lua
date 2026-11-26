@@ -4,7 +4,7 @@ local sksevr_source_dir = "C:/Code/sksevr_2_00_12/Data/Scripts/Source"
 local modlist_mods_dirs = {"C:/Games/NewSkyrimVR/mods", "C:/Games/MySkyrimVR/modlist/mods"}
 local ffdec_cli_jar = "C:/Users/nadako/scoop/apps/ffdec/current/ffdec-cli.jar"
 
-local version = "0.4.1"
+local version = "0.4.2"
 local name = "SurvivalModeVR"
 
 set_project(name)

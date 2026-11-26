@@ -1,3 +1,8 @@
+## 0.4.2 - 2026-11-26
+
+- Fixed the (temporary) item weight compatibility hook for Poached Bugs VR 0.6.0
+  I am not very good at assembly, so this time I added an ini option to disable it in case it breaks again :)
+
 ## 0.4.1 - 2026-11-25
 
 - Fixed not being able to navigate the perks menu when it's open without sleeping when level-up is pending.

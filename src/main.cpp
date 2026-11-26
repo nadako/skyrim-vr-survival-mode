@@ -26,7 +26,7 @@ namespace {
 }
 
 SKSEPluginLoad(SKSE::LoadInterface *skse) {
-	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize + HUD::trampolineSize + InventoryUI::trampolineSize;
+	constexpr size_t trampolineSize = DOBJ::trampolineSize + Papyrus::trampolineSize + FastTravel::trampolineSize + ItemWeight::trampolineSize + LevelUp::trampolineSize + Description::trampolineSize + HUD::trampolineSize + InventoryUI::trampolineSize + Compat::trampolineSize;
 	SKSE::Init(skse, {.trampoline = true, .trampolineSize = trampolineSize});
 
 	auto plugin = SKSE::PluginDeclaration::GetSingleton();

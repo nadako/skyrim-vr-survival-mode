@@ -4,6 +4,11 @@
 namespace Config {
 	namespace {
 		REX::INI::Str<> sLogLevel{"Debug", "sLogLevel", "info"};
+		REX::INI::Bool<> sPoachedBugsCompat{"Compat", "bPoachedBugsVR060GetWeightRedirect", true};
+	}
+
+	bool IsPoachedBugsVRCompatEnabled() {
+		return sPoachedBugsCompat.GetValue();
 	}
 
 	void LoadConfigFile() {
